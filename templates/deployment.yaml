@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "myhelm-apigw.fullname" . }}
+  name: "{{ .Values.deployment.name }}-{{ .Values.image.tag }}"
   labels:
-    {{- include "myhelm-apigw.labels" . | nindent 4 }}
+    {{- include "myhelm-v2.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "myhelm-apigw.selectorLabels" . | nindent 6 }}
+      {{- include "myhelm-v2.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "myhelm-apigw.labels" . | nindent 8 }}
+        {{- include "myhelm-v2.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "myhelm-apigw.serviceAccountName" . }}
+      serviceAccountName: {{ include "myhelm-v2.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -40,10 +40,6 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          # livenessProbe:
-          #   {{- toYaml .Values.livenessProbe | nindent 12 }}
-          # readinessProbe:
-          #   {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
