@@ -9,6 +9,6 @@ entries:
     name: myhelm-apigw
     type: application
     urls:
-    - docs/myhelm-apigw-0.1.0.tgz
+    - myhelm-apigw-0.1.0.tgz
     version: 0.1.0
 generated: "2024-08-19T12:26:59.244056808+07:00"
